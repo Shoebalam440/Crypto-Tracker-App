@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- added -->
+    <title>Title</title>
+
+    <!-- font (Syne) -->
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root{
+            --midnight: #071A3A;
+            --light-midnight: #0E305F;
+            --accent: #1E90FF;
+            --card: rgba(255,255,255,0.04);
+            --text: #FFFFFF;
+            --muted: rgba(255,255,255,0.78);
+            --radius: 12px;
+        }
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{
+            min-height:100vh;
+            font-family: "Syne", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+            background: linear-gradient(160deg, #04233b 0%, #062a4a 40%, #0b3458 100%);
+            color:var(--text);
+            padding:28px;
+            display:flex;
+            align-items:flex-start;
+            justify-content:center;
+        }
+
+        .results-wrapper{
+            width:100%;
+            max-width:980px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+            border-radius:var(--radius);
+            padding:22px;
+            box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+            border:1px solid rgba(255,255,255,0.04);
+            backdrop-filter: blur(6px);
+        }
+
+        h2{
+            font-size:1.35rem;
+            margin-bottom:12px;
+            color:var(--text);
+            font-weight:700;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+            margin-top:12px;
+            overflow:hidden;
+            border-radius:10px;
+        }
+        thead{
+            background: linear-gradient(90deg, rgba(30,144,255,0.12), rgba(255,255,255,0.02));
+            color:var(--text);
+        }
+        th, td{
+            padding:12px 14px;
+            text-align:left;
+            font-size:0.95rem;
+        }
+        thead th{
+            font-weight:600;
+            letter-spacing:0.3px;
+            font-size:0.95rem;
+        }
+
+        tbody tr{
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+        }
+
+        tbody tr:nth-child(even){
+            background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.005));
+        }
+
+        td{
+            color:var(--muted);
+        }
+
+        /* highlight price value */
+        td:nth-child(2){
+            font-weight:700;
+            color: #dbeeff;
+        }
+
+        /* change color for positive/negative change if possible (class-based if server outputs a class) */
+        .positive{ color:#9be89b; font-weight:600 }   /* green-ish */
+        .negative{ color:#ffb4b4; font-weight:600 }   /* reddish */
+
+        /* small responsive tweaks */
+        @media (max-width:720px){
+            .results-wrapper{padding:14px}
+            th,td{padding:10px}
+            h2{font-size:1.1rem}
+            table{font-size:0.92rem}
+            /* make table scroll horizontally on very small screens */
+            .table-container{overflow:auto}
+        }
+
+        /* subtle table header sticky on tall pages */
+        thead th{ position:sticky; top:0; backdrop-filter: blur(6px) }
+    </style>
+</head>
+<body>
+
+<div class="results-wrapper">
+    <h2>Live Crypto Prices</h2>
+    <div class="table-container">
+        <table>
+            <thead>
+            <tr>
+                <th> Coin</th>
+                <th> Price (USD)</th>
+                <th> 24h Change(%)</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="coin:${coins}">
+                <td th:text="${coin.name}"></td>
+                <td th:text="${coin.price}"></td>
+                <td th:text="${coin.change24h}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>
