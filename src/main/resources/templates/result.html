@@ -178,7 +178,8 @@
             </table>
         </div>
 
-        <div th:if="${coins == null or coins.empty}" style="text-align: center; padding: 20px; color: var(--muted);">
+        <div th:if="${(coins == null or coins.empty) and error == null}"
+            style="text-align: center; padding: 20px; color: var(--muted);">
             <p>No results to display.</p>
             <a href="/" style="color: var(--accent); text-decoration: none; margin-top: 10px; display: inline-block;">Go
                 back and try again</a>
