@@ -36,7 +36,19 @@ public class CryptoService {
 
         try {
             RestTemplate restTemplate = new RestTemplate();
-            String response = restTemplate.getForObject(url, String.class);
+            org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+            headers.set("User-Agent", "Mozilla/5.0");
+            headers.set("Accept", "application/json");
+            org.springframework.http.HttpEntity<String> entity = new org.springframework.http.HttpEntity<>(headers);
+            
+            org.springframework.http.ResponseEntity<String> responseEntity = restTemplate.exchange(
+                    url, 
+                    org.springframework.http.HttpMethod.GET, 
+                    entity, 
+                    String.class
+            );
+            
+            String response = responseEntity.getBody();
 
             if (response != null) {
                 JSONObject json = new JSONObject(response);
@@ -45,20 +57,12 @@ public class CryptoService {
                     if (json.has(coin)) {
                         JSONObject coinJson = json.getJSONObject(coin);
                         double price = coinJson.getDouble("usd");
-                        double change24h = coinJson.optDouble("usd_24h_change", 0.0); // Use optDouble to avoid error if
-                                                                                      // key missing
+                        double change24h = coinJson.optDouble("usd_24h_change", 0.0);
                         coinsList.add(new CryptoCoins(coin, coin, price, change24h));
                     }
                 }
             }
         } catch (Exception e) {
-            // Log the error (in a real app, use a Logger)
-            System.err.println("Error fetching crypto prices: " + e.getMessage());
-            // We can rethrow or return empty list depending on requirement.
-            // For now, let's return what we have or empty list, but the controller might
-            // want to know about the error.
-            // To keep it simple for this fix, we'll just print stack trace and return empty
-            // list so app doesn't crash.
             e.printStackTrace();
         }
         return coinsList;
