@@ -24,18 +24,10 @@ public class CryptoController {
     }
 
     @PostMapping("/track")
-    public String track(@RequestParam String coins, Model model) {
-        try {
-            List<String> coinList = Arrays.asList(coins.split(","));
-            List<CryptoCoins> result = cryptoService.getCryptoPrices(coinList);
-            model.addAttribute("coins", result);
-            if (result.isEmpty()) {
-                model.addAttribute("error", "No data found for the given coins. Please check the names and try again.");
-            }
-        } catch (Exception e) {
-            model.addAttribute("error", "An unexpected error occurred while fetching prices.");
-            model.addAttribute("coins", List.of()); // Ensure coins list is not null
-        }
+    public String track(@RequestParam String coins, Model model){
+        List<String> coinList= Arrays.asList(coins.split(","));
+        List<CryptoCoins>result=cryptoService.getCryptoPrices(coinList);
+        model.addAttribute("coins",result);
         return "result";
     }
 
